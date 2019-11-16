@@ -645,3 +645,982 @@ SC_upCOUNTER #(.upCOUNTER_DATAWIDTH(DATAWIDTH_BUS)) SC_upCOUNTER_u0 (
 );
 
 endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module CC_BOTTOMSIDECOMPARATOR #(parameter BOTTOMSIDECOMPARATOR_DATAWIDTH=8)(
+//////////// OUTPUTS //////////
+	CC_BOTTOMSIDECOMPARATOR_bottomside_OutLow,
+//////////// INPUTS //////////
+	CC_BOTTOMSIDECOMPARATOR_data_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output	reg CC_BOTTOMSIDECOMPARATOR_bottomside_OutLow;
+input 	[BOTTOMSIDECOMPARATOR_DATAWIDTH-1:0] CC_BOTTOMSIDECOMPARATOR_data_InBUS;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+//=======================================================
+//  Structural coding
+//=======================================================
+always @(CC_BOTTOMSIDECOMPARATOR_data_InBUS)
+begin
+	if( CC_BOTTOMSIDECOMPARATOR_data_InBUS == 8'b00000000)
+		CC_BOTTOMSIDECOMPARATOR_bottomside_OutLow = 1'b1;
+	else 
+		CC_BOTTOMSIDECOMPARATOR_bottomside_OutLow = 1'b0;
+end
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_RegHOUSESTYPE #(parameter RegHOUSESTYPE_DATAWIDTH=8, parameter DATA_FIXED_INITREGHOUSES=8'b11011011)(
+	//////////// OUTPUTS //////////
+	SC_RegHOUSESTYPE_data_OutBUS,
+	//////////// INPUTS //////////
+	SC_RegHOUSESTYPE_CLOCK_50,
+	SC_RegHOUSESTYPE_RESET_InHigh,
+	SC_RegHOUSESTYPE_clear_InLow, 
+	SC_RegHOUSESTYPE_load_InLow, 
+	SC_RegHOUSESTYPE_shiftselection_In,
+	SC_RegHOUSESTYPE_data_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output		[RegHOUSESTYPE_DATAWIDTH-1:0]	SC_RegHOUSESTYPE_data_OutBUS;
+input		SC_RegHOUSESTYPE_CLOCK_50;
+input		SC_RegHOUSESTYPE_RESET_InHigh;
+input		SC_RegHOUSESTYPE_clear_InLow;
+input		SC_RegHOUSESTYPE_load_InLow;	
+input		[1:0] SC_RegHOUSESTYPE_shiftselection_In;
+input		[RegHOUSESTYPE_DATAWIDTH-1:0]	SC_RegHOUSESTYPE_data_InBUS;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [RegHOUSESTYPE_DATAWIDTH-1:0] RegHOUSESTYPE_Register;
+reg [RegHOUSESTYPE_DATAWIDTH-1:0] RegHOUSESTYPE_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (SC_RegHOUSESTYPE_clear_InLow == 1'b0)
+		RegHOUSESTYPE_Signal = DATA_FIXED_INITREGHOUSES;
+	else if (SC_RegHOUSESTYPE_load_InLow == 1'b0)
+		RegHOUSESTYPE_Signal = SC_RegHOUSESTYPE_data_InBUS;
+	else if (SC_RegHOUSESTYPE_shiftselection_In == 2'b01)
+		RegHOUSESTYPE_Signal = {RegHOUSESTYPE_Register[RegHOUSESTYPE_DATAWIDTH-2:0],RegHOUSESTYPE_Register[RegHOUSESTYPE_DATAWIDTH-1]};
+	else if (SC_RegHOUSESTYPE_shiftselection_In== 2'b10)
+		RegHOUSESTYPE_Signal = {RegHOUSESTYPE_Register[0],RegHOUSESTYPE_Register[RegHOUSESTYPE_DATAWIDTH-1:1]};
+	else
+		RegHOUSESTYPE_Signal = RegHOUSESTYPE_Register;
+	end	
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_RegHOUSESTYPE_CLOCK_50, posedge SC_RegHOUSESTYPE_RESET_InHigh)
+begin
+	if (SC_RegHOUSESTYPE_RESET_InHigh == 1'b1)
+		RegHOUSESTYPE_Register <= 0;
+	else
+		RegHOUSESTYPE_Register <= RegHOUSESTYPE_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+//OUTPUT LOGIC: COMBINATIONAL
+assign SC_RegHOUSESTYPE_data_OutBUS = RegHOUSESTYPE_Register;
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_upSPEEDCOUNTER #(parameter upSPEEDCOUNTER_DATAWIDTH=8)(
+	//////////// OUTPUTS //////////
+	SC_upSPEEDCOUNTER_data_OutBUS,
+	//////////// INPUTS //////////
+	SC_upSPEEDCOUNTER_CLOCK_50,
+	SC_upSPEEDCOUNTER_RESET_InHigh,
+	SC_upSPEEDCOUNTER_upcount_InLow
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output		[upSPEEDCOUNTER_DATAWIDTH-1:0]	SC_upSPEEDCOUNTER_data_OutBUS;
+input		SC_upSPEEDCOUNTER_CLOCK_50;
+input		SC_upSPEEDCOUNTER_RESET_InHigh;
+input		SC_upSPEEDCOUNTER_upcount_InLow;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [upSPEEDCOUNTER_DATAWIDTH-1:0] upSPEEDCOUNTER_Register;
+reg [upSPEEDCOUNTER_DATAWIDTH-1:0] upSPEEDCOUNTER_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (SC_upSPEEDCOUNTER_upcount_InLow == 1'b0)
+		upSPEEDCOUNTER_Signal = upSPEEDCOUNTER_Register + 1'b1;
+	else
+		upSPEEDCOUNTER_Signal = upSPEEDCOUNTER_Register;
+	end	
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_upSPEEDCOUNTER_CLOCK_50, posedge SC_upSPEEDCOUNTER_RESET_InHigh)
+begin
+	if (SC_upSPEEDCOUNTER_RESET_InHigh  == 1'b1)
+		upSPEEDCOUNTER_Register <= 0;
+	else
+		upSPEEDCOUNTER_Register <= upSPEEDCOUNTER_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+//OUTPUT LOGIC: COMBINATIONAL
+assign SC_upSPEEDCOUNTER_data_OutBUS = upSPEEDCOUNTER_Register;
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_STATEMACHINECARS (
+	//////////// OUTPUTS //////////
+	SC_STATEMACHINECARS_clear_OutLow,
+	SC_STATEMACHINECARS_load_OutLow,
+	SC_STATEMACHINECARS_shiftselection_R_Out,
+	SC_STATEMACHINECARS_shiftselection_L_Out,
+	SC_STATEMACHINECARS_upcount_out,
+	//////////// INPUTS //////////
+	SC_STATEMACHINECARS_CLOCK_50,
+	SC_STATEMACHINECARS_RESET_InHigh,
+	SC_STATEMACHINECARS_startButton_InLow,
+	SC_STATEMACHINECARS_T0_InLow,
+	SC_STATEMACHINECARS_win_InLow
+);	
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+// states declaration
+localparam STATE_RESET_0									= 0;
+localparam STATE_START_0									= 1;
+localparam STATE_CHECK_0									= 2;
+localparam STATE_INIT_0										= 3;
+localparam STATE_SHIFT_0									= 4;
+localparam STATE_COUNT_0									= 5;
+localparam STATE_CHECK_1									= 6;
+localparam STATE_LOAD_0										= 7;
+//=======================================================
+//  PORT declarations
+//=======================================================
+output reg		SC_STATEMACHINECARS_clear_OutLow;
+output reg		SC_STATEMACHINECARS_load_OutLow;
+output reg		[1:0] SC_STATEMACHINECARS_shiftselection_R_Out;
+output reg		[1:0] SC_STATEMACHINECARS_shiftselection_L_Out;
+output reg 		SC_STATEMACHINECARS_upcount_out;
+input			SC_STATEMACHINECARS_CLOCK_50;
+input 		SC_STATEMACHINECARS_RESET_InHigh;
+input			SC_STATEMACHINECARS_startButton_InLow;
+input			SC_STATEMACHINECARS_T0_InLow;
+input			SC_STATEMACHINECARS_win_InLow;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [3:0] STATE_Register;
+reg [3:0] STATE_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+// NEXT STATE LOGIC : COMBINATIONAL
+always @(*)
+begin
+	case (STATE_Register)
+		STATE_RESET_0: STATE_Signal = STATE_START_0;
+		STATE_START_0: STATE_Signal = STATE_CHECK_0;
+		STATE_CHECK_0: if (SC_STATEMACHINECARS_startButton_InLow == 1'b0 ) STATE_Signal = STATE_INIT_0;
+						else if (SC_STATEMACHINECARS_T0_InLow == 1'b0) STATE_Signal = STATE_SHIFT_0;
+						else if (SC_STATEMACHINECARS_win_InLow == 1'b0) STATE_Signal = STATE_LOAD_0;
+						else STATE_Signal = STATE_COUNT_0;
+		STATE_LOAD_0:  STATE_Signal = STATE_CHECK_0;
+		STATE_INIT_0:	STATE_Signal = STATE_CHECK_1;
+		STATE_SHIFT_0: 	STATE_Signal = STATE_COUNT_0;
+		STATE_COUNT_0: 	STATE_Signal = STATE_CHECK_0;
+		
+		STATE_CHECK_1: if (SC_STATEMACHINECARS_startButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else STATE_Signal = STATE_CHECK_0;
+
+		default : 		STATE_Signal = STATE_CHECK_0;
+	endcase
+end
+// STATE REGISTER : SEQUENTIAL
+always @ ( posedge SC_STATEMACHINECARS_CLOCK_50 , posedge SC_STATEMACHINECARS_RESET_InHigh)
+begin
+	if (SC_STATEMACHINECARS_RESET_InHigh == 1'b1)
+		STATE_Register <= STATE_RESET_0;
+	else
+		STATE_Register <= STATE_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+// OUTPUT LOGIC : COMBINATIONAL
+always @ (*)
+begin
+	case (STATE_Register)
+//=========================================================
+// STATE_RESET
+//=========================================================
+	STATE_RESET_0 :	
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11; 
+			SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_START
+//=========================================================
+	STATE_START_0 :	
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11;
+			SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_CHECK
+//=========================================================
+	STATE_CHECK_0 :
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11;
+			SC_STATEMACHINECARS_shiftselection_L_Out  = 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_CHECK
+//=========================================================
+	STATE_CHECK_1 :
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11; 
+			SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_INIT
+//=========================================================
+	STATE_INIT_0 :	
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b0;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11;
+			SC_STATEMACHINECARS_shiftselection_L_Out  = 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_SHIFT
+//=========================================================
+	STATE_SHIFT_0 :
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b10;
+		   SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b01;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// STATE_COUNT_0
+//=========================================================
+	STATE_COUNT_0 :	
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11;
+			SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b0;
+		end
+		
+	STATE_LOAD_0 :
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b0;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11; 
+			SC_STATEMACHINECARS_shiftselection_L_Out  = 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+//=========================================================
+// DEFAULT
+//=========================================================
+	default :
+		begin
+			SC_STATEMACHINECARS_clear_OutLow = 1'b1;
+			SC_STATEMACHINECARS_load_OutLow = 1'b1;
+			SC_STATEMACHINECARS_shiftselection_R_Out  = 2'b11;
+			SC_STATEMACHINECARS_shiftselection_L_Out	= 2'b11;
+			SC_STATEMACHINECARS_upcount_out = 1'b1;
+		end
+	endcase
+end
+endmodule
+
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_RegCARSTYPE #(parameter RegCARSTYPE_DATAWIDTH=8, parameter DATA_FIXED_INITREGCARS=8'b00000000)(
+	//////////// OUTPUTS //////////
+	SC_RegCARSTYPE_data_OutBUS,
+	//////////// INPUTS //////////
+	SC_RegCARSTYPE_CLOCK_50,
+	SC_RegCARSTYPE_RESET_InHigh,
+	SC_RegCARSTYPE_clear_InLow, 
+	SC_RegCARSTYPE_load_InLow, 
+	SC_RegCARSTYPE_shiftselection_In,
+	SC_RegCARSTYPE_data_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output		[RegCARSTYPE_DATAWIDTH-1:0]	SC_RegCARSTYPE_data_OutBUS;
+input		SC_RegCARSTYPE_CLOCK_50;
+input		SC_RegCARSTYPE_RESET_InHigh;
+input		SC_RegCARSTYPE_clear_InLow;
+input		SC_RegCARSTYPE_load_InLow;	
+input		[1:0] SC_RegCARSTYPE_shiftselection_In;
+input		[RegCARSTYPE_DATAWIDTH-1:0]	SC_RegCARSTYPE_data_InBUS;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [RegCARSTYPE_DATAWIDTH-1:0] RegCARSTYPE_Register;
+reg [RegCARSTYPE_DATAWIDTH-1:0] RegCARSTYPE_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (SC_RegCARSTYPE_clear_InLow == 1'b0)
+		RegCARSTYPE_Signal = DATA_FIXED_INITREGCARS;
+	else if (SC_RegCARSTYPE_load_InLow == 1'b0)
+		RegCARSTYPE_Signal = SC_RegCARSTYPE_data_InBUS;
+	else if (SC_RegCARSTYPE_shiftselection_In == 2'b01)
+		RegCARSTYPE_Signal = {RegCARSTYPE_Register[RegCARSTYPE_DATAWIDTH-2:0],RegCARSTYPE_Register[RegCARSTYPE_DATAWIDTH-1]};
+	else if (SC_RegCARSTYPE_shiftselection_In== 2'b10)
+		RegCARSTYPE_Signal = {RegCARSTYPE_Register[0],RegCARSTYPE_Register[RegCARSTYPE_DATAWIDTH-1:1]};
+	else
+		RegCARSTYPE_Signal = RegCARSTYPE_Register;
+	end	
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_RegCARSTYPE_CLOCK_50, posedge SC_RegCARSTYPE_RESET_InHigh)
+begin
+	if (SC_RegCARSTYPE_RESET_InHigh == 1'b1)
+		RegCARSTYPE_Register <= 0;
+	else
+		RegCARSTYPE_Register <= RegCARSTYPE_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+//OUTPUT LOGIC: COMBINATIONAL
+assign SC_RegCARSTYPE_data_OutBUS = RegCARSTYPE_Register;
+
+endmodule
+
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module CC_SPEEDCOMPARATOR #(parameter SPEEDCOMPARATOR_DATAWIDTH=8)(
+//////////// OUTPUTS //////////
+	CC_SPEEDCOMPARATOR_T0_OutLow,
+//////////// INPUTS //////////
+	CC_SPEEDCOMPARATOR_data_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output	reg CC_SPEEDCOMPARATOR_T0_OutLow;
+input 	[SPEEDCOMPARATOR_DATAWIDTH-1:0] CC_SPEEDCOMPARATOR_data_InBUS;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+//=======================================================
+//  Structural coding
+//=======================================================
+always @(CC_SPEEDCOMPARATOR_data_InBUS)
+begin
+	if( CC_SPEEDCOMPARATOR_data_InBUS == 22'b1111111111111111111111)
+		CC_SPEEDCOMPARATOR_T0_OutLow = 1'b0;
+	else 
+		CC_SPEEDCOMPARATOR_T0_OutLow = 1'b1;
+end
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_RegFROGGERTYPE #(parameter RegFROGGERTYPE_DATAWIDTH=8, parameter DATA_FIXED_INITREGFROGGER=8'b00000000)(
+	//////////// OUTPUTS //////////
+	SC_RegFROGGERTYPE_data_OutBUS,
+	
+	//////////// INPUTS //////////
+	SC_RegFROGGERTYPE_CLOCK_50,
+	SC_RegFROGGERTYPE_RESET_InHigh,
+	SC_RegFROGGERTYPE_clear_InLow, 
+	SC_RegFROGGERTYPE_load0_InLow, 
+	SC_RegFROGGERTYPE_load1_InLow, 
+	SC_RegFROGGERTYPE_shiftselection_In,
+	SC_RegFROGGERTYPE_data0_InBUS,
+	SC_RegFROGGERTYPE_data1_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output		[RegFROGGERTYPE_DATAWIDTH-1:0]	SC_RegFROGGERTYPE_data_OutBUS;
+input		SC_RegFROGGERTYPE_CLOCK_50;
+input		SC_RegFROGGERTYPE_RESET_InHigh;
+input		SC_RegFROGGERTYPE_clear_InLow;
+input		SC_RegFROGGERTYPE_load0_InLow;	
+input		SC_RegFROGGERTYPE_load1_InLow;	
+input		[1:0] SC_RegFROGGERTYPE_shiftselection_In;
+input		[RegFROGGERTYPE_DATAWIDTH-1:0]	SC_RegFROGGERTYPE_data0_InBUS;
+input		[RegFROGGERTYPE_DATAWIDTH-1:0]	SC_RegFROGGERTYPE_data1_InBUS;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [RegFROGGERTYPE_DATAWIDTH-1:0] RegFROGGERTYPE_Register;
+reg [RegFROGGERTYPE_DATAWIDTH-1:0] RegFROGGERTYPE_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (SC_RegFROGGERTYPE_clear_InLow == 1'b0)
+		RegFROGGERTYPE_Signal = DATA_FIXED_INITREGFROGGER;
+	else if (SC_RegFROGGERTYPE_load0_InLow == 1'b0)
+		RegFROGGERTYPE_Signal = SC_RegFROGGERTYPE_data0_InBUS;
+	else if (SC_RegFROGGERTYPE_load1_InLow == 1'b0)
+		RegFROGGERTYPE_Signal = SC_RegFROGGERTYPE_data1_InBUS;
+	else if (SC_RegFROGGERTYPE_shiftselection_In == 2'b01)
+		RegFROGGERTYPE_Signal = {RegFROGGERTYPE_Register[RegFROGGERTYPE_DATAWIDTH-2:0],RegFROGGERTYPE_Register[RegFROGGERTYPE_DATAWIDTH-1]};
+	else if (SC_RegFROGGERTYPE_shiftselection_In == 2'b10)
+		RegFROGGERTYPE_Signal = {RegFROGGERTYPE_Register[0],RegFROGGERTYPE_Register[RegFROGGERTYPE_DATAWIDTH-1:1]};
+	else
+		RegFROGGERTYPE_Signal = RegFROGGERTYPE_Register;
+	end	
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_RegFROGGERTYPE_CLOCK_50, posedge SC_RegFROGGERTYPE_RESET_InHigh)
+begin
+	if (SC_RegFROGGERTYPE_RESET_InHigh == 1'b1)
+		RegFROGGERTYPE_Register <= 0;
+	else
+		RegFROGGERTYPE_Register <= RegFROGGERTYPE_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+//OUTPUT LOGIC: COMBINATIONAL
+assign SC_RegFROGGERTYPE_data_OutBUS = RegFROGGERTYPE_Register;
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_STATEMACHINEFROGGER (
+	//////////// OUTPUTS //////////
+	SC_STATEMACHINEFROGGER_clear_OutLow,
+	SC_STATEMACHINEFROGGER_load0_OutLow,
+	SC_STATEMACHINEFROGGER_load1_OutLow,
+	SC_STATEMACHINEFROGGER_shiftselection_Out,
+	//////////// INPUTS //////////
+	SC_STATEMACHINEFROGGER_CLOCK_50,
+	SC_STATEMACHINEFROGGER_RESET_InHigh,
+	SC_STATEMACHINEFROGGER_startButton_InLow,
+	SC_STATEMACHINEFROGGER_upButton_InLow,
+	SC_STATEMACHINEFROGGER_downButton_InLow,
+	SC_STATEMACHINEFROGGER_leftButton_InLow,
+	SC_STATEMACHINEFROGGER_rightButton_InLow,
+	SC_STATEMACHINEFROGGER_bottomsidecomparator_InLow,
+	SC_STATEMACHINEFROGGER_win_InLow,
+	SC_STATEMACHINEFROGGER_dead_InLow
+);	
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+// states declaration
+localparam STATE_RESET_0									= 0;
+localparam STATE_START_0									= 1;
+localparam STATE_CHECK_0									= 2;
+localparam STATE_INIT_0										= 3;
+localparam STATE_UP_0										= 4;
+localparam STATE_DOWN_0										= 5; 
+localparam STATE_LEFT_0										= 6; 
+localparam STATE_RIGHT_0									= 7;
+localparam STATE_CHECK_1									= 8;
+//=======================================================
+//  PORT declarations
+//=======================================================
+output reg		SC_STATEMACHINEFROGGER_clear_OutLow;
+output reg		SC_STATEMACHINEFROGGER_load0_OutLow;
+output reg		SC_STATEMACHINEFROGGER_load1_OutLow;
+output reg		[1:0] SC_STATEMACHINEFROGGER_shiftselection_Out;
+input			SC_STATEMACHINEFROGGER_CLOCK_50;
+input 			SC_STATEMACHINEFROGGER_RESET_InHigh;
+input			SC_STATEMACHINEFROGGER_startButton_InLow;
+input			SC_STATEMACHINEFROGGER_upButton_InLow;
+input			SC_STATEMACHINEFROGGER_downButton_InLow;
+input			SC_STATEMACHINEFROGGER_leftButton_InLow;
+input			SC_STATEMACHINEFROGGER_rightButton_InLow;
+input			SC_STATEMACHINEFROGGER_bottomsidecomparator_InLow;
+input			SC_STATEMACHINEFROGGER_win_InLow;
+input			SC_STATEMACHINEFROGGER_dead_InLow;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [3:0] STATE_Register;
+reg [3:0] STATE_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+// NEXT STATE LOGIC : COMBINATIONAL
+always @(*)
+begin
+	case (STATE_Register)
+		STATE_RESET_0: STATE_Signal = STATE_START_0;
+		STATE_START_0: STATE_Signal = STATE_CHECK_0;
+		STATE_CHECK_0: if (SC_STATEMACHINEFROGGER_startButton_InLow == 1'b0 || SC_STATEMACHINEFROGGER_win_InLow == 1'b0 || SC_STATEMACHINEFROGGER_dead_InLow == 1'b0) STATE_Signal = STATE_INIT_0;
+						else if (SC_STATEMACHINEFROGGER_upButton_InLow == 1'b0) STATE_Signal = STATE_UP_0;
+						else if (SC_STATEMACHINEFROGGER_downButton_InLow == 1'b0 & (SC_STATEMACHINEFROGGER_bottomsidecomparator_InLow == 1'b1)) STATE_Signal = STATE_DOWN_0;
+						else if (SC_STATEMACHINEFROGGER_leftButton_InLow == 1'b0) STATE_Signal = STATE_LEFT_0;
+						else if (SC_STATEMACHINEFROGGER_rightButton_InLow == 1'b0) STATE_Signal = STATE_RIGHT_0;
+						else STATE_Signal = STATE_CHECK_0;
+		STATE_INIT_0: 	STATE_Signal = STATE_CHECK_1;
+		STATE_UP_0: 	STATE_Signal = STATE_CHECK_1;
+		STATE_DOWN_0: 	STATE_Signal = STATE_CHECK_1;
+		STATE_LEFT_0:  	STATE_Signal = STATE_CHECK_1;
+		STATE_RIGHT_0:  STATE_Signal = STATE_CHECK_1;
+
+		STATE_CHECK_1: if (SC_STATEMACHINEFROGGER_startButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else if (SC_STATEMACHINEFROGGER_upButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else if (SC_STATEMACHINEFROGGER_downButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else if (SC_STATEMACHINEFROGGER_leftButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else if (SC_STATEMACHINEFROGGER_rightButton_InLow == 1'b0) STATE_Signal = STATE_CHECK_1;
+						else STATE_Signal = STATE_CHECK_0;
+
+		default : 		STATE_Signal = STATE_CHECK_0;
+	endcase
+end
+// STATE REGISTER : SEQUENTIAL
+always @ ( posedge SC_STATEMACHINEFROGGER_CLOCK_50 , posedge SC_STATEMACHINEFROGGER_RESET_InHigh)
+begin
+	if (SC_STATEMACHINEFROGGER_RESET_InHigh == 1'b1)
+		STATE_Register <= STATE_RESET_0;
+	else
+		STATE_Register <= STATE_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+// OUTPUT LOGIC : COMBINATIONAL
+always @ (*)
+begin
+	case (STATE_Register)
+//=========================================================
+// STATE_RESET
+//=========================================================
+	STATE_RESET_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_START
+//=========================================================
+	STATE_START_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_CHECK
+//=========================================================
+	STATE_CHECK_0 :
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_CHECK
+//=========================================================
+	STATE_CHECK_1 :
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_INIT_0
+//=========================================================
+	STATE_INIT_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b0;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_UP_0
+//=========================================================
+	STATE_UP_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b0;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_DOWN_0
+//=========================================================
+	STATE_DOWN_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b0;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+//=========================================================
+// STATE_LEFT_0
+//=========================================================
+	STATE_LEFT_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b01; 
+		end
+//=========================================================
+// STATE_RIGHT_0
+//=========================================================
+	STATE_RIGHT_0 :	
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b10; 
+		end
+
+//=========================================================
+// DEFAULT
+//=========================================================
+	default :
+		begin
+			SC_STATEMACHINEFROGGER_clear_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load0_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_load1_OutLow = 1'b1;
+			SC_STATEMACHINEFROGGER_shiftselection_Out  = 2'b11; 
+		end
+	endcase
+end
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module CC_WINCOMPARATOR #(parameter WINCOMPARATOR_DATAWIDTH=8)(
+//////////// OUTPUTS //////////
+	CC_WINCOMPARATOR_win_OutLow,
+	CC_WINCOMPARATOR_winLevel_OutLow,
+	CC_WINCOMPARATOR_data_OutBUS,
+//////////// INPUTS //////////
+	CC_WINCOMPARATOR_data_InBUS,
+	SC_WINCOMPARATOR_CLOCK_50,
+	SC_WINCOMPARATOR_RESET_InHigh,
+	CC_WINCOMPARATOR_Regster_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output	reg CC_WINCOMPARATOR_win_OutLow;
+output	reg CC_WINCOMPARATOR_winLevel_OutLow;
+output	[WINCOMPARATOR_DATAWIDTH-1:0] CC_WINCOMPARATOR_data_OutBUS;
+input 	[WINCOMPARATOR_DATAWIDTH-1:0] CC_WINCOMPARATOR_data_InBUS;
+input		[WINCOMPARATOR_DATAWIDTH-1:0] CC_WINCOMPARATOR_Regster_InBUS;
+input		SC_WINCOMPARATOR_RESET_InHigh;
+input		SC_WINCOMPARATOR_CLOCK_50;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [WINCOMPARATOR_DATAWIDTH-1:0]WINCOMPARATOR_Signal;
+reg [WINCOMPARATOR_DATAWIDTH-1:0]WINCOMPARATOR_Register;
+//=======================================================
+//  Structural coding
+//=======================================================
+always @(CC_WINCOMPARATOR_data_InBUS, CC_WINCOMPARATOR_Regster_InBUS)
+begin
+	if(CC_WINCOMPARATOR_data_InBUS == 8'b11111111)
+		begin
+		WINCOMPARATOR_Signal = 8'b11011011;
+		CC_WINCOMPARATOR_winLevel_OutLow = 1'b0;
+		CC_WINCOMPARATOR_win_OutLow = 1'b0;
+		end
+	else if( CC_WINCOMPARATOR_data_InBUS != CC_WINCOMPARATOR_Regster_InBUS )
+		begin
+		WINCOMPARATOR_Signal = CC_WINCOMPARATOR_data_InBUS;
+		CC_WINCOMPARATOR_win_OutLow = 1'b0;
+		CC_WINCOMPARATOR_winLevel_OutLow = 1'b1;
+		end
+	else 
+		begin
+		WINCOMPARATOR_Signal = 8'b11011011;
+		CC_WINCOMPARATOR_winLevel_OutLow = 1'b1;
+		CC_WINCOMPARATOR_win_OutLow = 1'b1;
+		end
+end
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_WINCOMPARATOR_CLOCK_50, posedge SC_WINCOMPARATOR_RESET_InHigh)
+begin
+	if (SC_WINCOMPARATOR_RESET_InHigh  == 1'b1)
+		WINCOMPARATOR_Register <= 0;
+	else
+		WINCOMPARATOR_Register <= WINCOMPARATOR_Signal;
+end
+assign CC_WINCOMPARATOR_data_OutBUS = WINCOMPARATOR_Register;
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module CC_LEVELSTYPE #(parameter LEVELSTYPE_DATAWIDTH=8)(
+	//////////// OUTPUTS //////////
+	CC_LEVELSTYPE_regcars1_OutBUS,
+	CC_LEVELSTYPE_regcars2_OutBUS,
+	CC_LEVELSTYPE_regcars3_OutBUS,
+	CC_LEVELSTYPE_regcars4_OutBUS,
+	CC_LEVELSTYPE_regcars5_OutBUS,
+	CC_LEVELSTYPE_regcars6_OutBUS,
+	CC_LEVELSTYPE_regHouse_OutBUS,
+	//////////// INPUTS //////////
+	CC_LEVELSTYPE_levelcount_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0] CC_LEVELSTYPE_regcars1_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regcars2_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regcars3_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regcars4_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regcars5_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regcars6_OutBUS;
+output	reg	[LEVELSTYPE_DATAWIDTH-1:0]	CC_LEVELSTYPE_regHouse_OutBUS;
+input		[1:0] CC_LEVELSTYPE_levelcount_InBUS;
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (CC_LEVELSTYPE_levelcount_InBUS == 2'b00)
+		begin
+		CC_LEVELSTYPE_regcars1_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars2_OutBUS = 8'b01100000;
+		CC_LEVELSTYPE_regcars3_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars4_OutBUS = 8'b00011000;
+		CC_LEVELSTYPE_regcars5_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars6_OutBUS = 8'b00000011;
+		CC_LEVELSTYPE_regHouse_OutBUS = 8'b11011011;
+		end
+	else if (CC_LEVELSTYPE_levelcount_InBUS == 2'b01)
+		begin
+		CC_LEVELSTYPE_regcars1_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars2_OutBUS = 8'b11100000;
+		CC_LEVELSTYPE_regcars3_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars4_OutBUS = 8'b00000111;
+		CC_LEVELSTYPE_regcars5_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars6_OutBUS = 8'b00111000;
+		CC_LEVELSTYPE_regHouse_OutBUS = 8'b11100111;		
+		end
+	else if (CC_LEVELSTYPE_levelcount_InBUS == 2'b10)
+		begin
+		CC_LEVELSTYPE_regcars1_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars2_OutBUS = 8'b11000000;
+		CC_LEVELSTYPE_regcars3_OutBUS = 8'b00001110;
+		CC_LEVELSTYPE_regcars4_OutBUS = 8'b01110000;
+		CC_LEVELSTYPE_regcars5_OutBUS = 8'b00001100;
+		CC_LEVELSTYPE_regcars6_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regHouse_OutBUS = 8'b10111101;		
+		end
+	else if (CC_LEVELSTYPE_levelcount_InBUS == 2'b11)
+		begin
+		CC_LEVELSTYPE_regcars1_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars2_OutBUS = 8'b11100000;
+		CC_LEVELSTYPE_regcars3_OutBUS = 8'b00001100;
+		CC_LEVELSTYPE_regcars4_OutBUS = 8'b01100000;
+		CC_LEVELSTYPE_regcars5_OutBUS = 8'b00000011;
+		CC_LEVELSTYPE_regcars6_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regHouse_OutBUS = 8'b01111110;		
+		end
+	else
+		begin
+		CC_LEVELSTYPE_regcars1_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars2_OutBUS = 8'b01100000;
+		CC_LEVELSTYPE_regcars3_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars4_OutBUS = 8'b00011000;
+		CC_LEVELSTYPE_regcars5_OutBUS = 8'b00000000;
+		CC_LEVELSTYPE_regcars6_OutBUS = 8'b00000011;
+		CC_LEVELSTYPE_regHouse_OutBUS = 8'b11011011;		
+		end
+	end	
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module SC_LEVELCOUNTER #(parameter LEVELCOUNTER_DATAWIDTH=2)(
+	//////////// OUTPUTS //////////
+	SC_LEVELCOUNTER_data_OutBUS,
+	//////////// INPUTS //////////
+	SC_LEVELCOUNTER_CLOCK_50,
+	SC_LEVELCOUNTER_RESET_InHigh,
+	SC_LEVELCOUNTER_upcount_InLow
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output		[1:0]SC_LEVELCOUNTER_data_OutBUS;
+input		SC_LEVELCOUNTER_CLOCK_50;
+input		SC_LEVELCOUNTER_RESET_InHigh;
+input		SC_LEVELCOUNTER_upcount_InLow;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+reg [1:0] LEVELCOUNTER_Register;
+reg [1:0] LEVELCOUNTER_Signal;
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (SC_LEVELCOUNTER_upcount_InLow == 1'b0)
+		LEVELCOUNTER_Signal = LEVELCOUNTER_Register + 1'b1;
+	else
+		LEVELCOUNTER_Signal = LEVELCOUNTER_Register;
+	end	
+//STATE REGISTER: SEQUENTIAL
+always @(posedge SC_LEVELCOUNTER_CLOCK_50, posedge SC_LEVELCOUNTER_RESET_InHigh)
+begin
+	if (SC_LEVELCOUNTER_RESET_InHigh  == 1'b1)
+		LEVELCOUNTER_Register <= 0;
+	else
+		LEVELCOUNTER_Register <= LEVELCOUNTER_Signal;
+end
+//=======================================================
+//  Outputs
+//=======================================================
+//OUTPUT LOGIC: COMBINATIONAL
+assign SC_LEVELCOUNTER_data_OutBUS = LEVELCOUNTER_Register;
+
+endmodule
+
+//=======================================================
+//  MODULE Definition
+//=======================================================
+module CC_DEADCOUNTER #(parameter DEADCOUNTER_DATAWIDTH=8)(
+	//////////// OUTPUTS //////////
+	CC_DEADCOUNTER_deadstate_OutLow,
+	//////////// INPUTS //////////
+	CC_DEADCOUNTER_data_InBUS
+);
+//=======================================================
+//  PARAMETER declarations
+//=======================================================
+
+//=======================================================
+//  PORT declarations
+//=======================================================
+output	reg CC_DEADCOUNTER_deadstate_OutLow;
+input		[DEADCOUNTER_DATAWIDTH-1:0]	CC_DEADCOUNTER_data_InBUS;
+
+//=======================================================
+//  REG/WIRE declarations
+//=======================================================
+//=======================================================
+//  Structural coding
+//=======================================================
+//INPUT LOGIC: COMBINATIONAL
+always @(*)
+begin
+	if (CC_DEADCOUNTER_data_InBUS != 8'b00000000)
+		CC_DEADCOUNTER_deadstate_OutLow = 1'b0;
+	else
+		CC_DEADCOUNTER_deadstate_OutLow = 1'b1;
+end	
+endmodule
